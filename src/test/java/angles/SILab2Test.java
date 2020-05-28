@@ -1,94 +1,63 @@
 package angles;
 
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
-public class SILab2Test {
+class SILab2Test {
+	static SILab2 converter;
+
+	@BeforeAll
+	static void init(){
+		System.out.println("Instancing converter");
+		converter = new SILab2();
+	}
 
 	@Test
-	public void function() {
+	void testConvertibleAngles() {
 		assertEquals(
-				SILab2.function(List.of(
+				List.of(
+						360 * 3600,
+						300*3600+20*60+20
+				),
+				converter.function(
+				List.of(
 						new Angle(360, 0, 0),
-						new Angle(0, 0, 0)
-				)),
-				List.of(
-						1296000,
-						0
+						new Angle(300, 20, 20)
 				)
-		);
-		assertEquals(
-				SILab2.function(List.of(
-						// empty list : input
-				)),
-				List.of(
-					// empty list : output
-				)
-		);
-		assertEquals(
-				SILab2.function(List.of(
-						new Angle(100, 10, 10)
-				)),
-				List.of(
-						100*3600+10*60+10
-				)
-		);
+		));
+		assertEquals(List.of(0), converter.function(List.of(new Angle(0, 0, 0))));
+		assertEquals(List.of(),converter.function(List.of()));
 
 	}
 
 	@Test
-	public void testExceptions(){
-		// Valid degrees, invalid minutes, seconds don't matter
-		try {
-			SILab2.function(List.of(new Angle(300,-10,0)));
-			fail();
-		}
-		catch (Exception e){
-			final String expected = "The minutes of the angle are not valid!";
-			assertEquals(expected, e.getMessage());
-		}
+	void testExceptions() {
+		String INVALID_MINUTES = "The minutes of the angle are not valid!";
+		String INVALID_SECONDS = "The seconds of the angle are not valid";
+		String INVALID_ANGLE = "The angle is smaller or greater then the minimum";
+		String ANGLE_GREATER_THAN_MAX = "The angle is greater then the maximum";
 
-		// Valid degrees, valid minutes, invalid seconds
-		try {
-			SILab2.function(List.of(new Angle(300,10,-10)));
-			fail();
-		}
-		catch (Exception e){
-			final String expected = "The seconds of the angle are not valid";
-			assertEquals(expected, e.getMessage());
-		}
+		RuntimeException ex;
+		ex = assertThrows(RuntimeException.class, () -> converter.function(List.of(new Angle(500, 20, 20))));
+		assertTrue(ex.getMessage().contains(INVALID_ANGLE));
 
-		// Degrees are 360, invalid minutes
-		try {
-			SILab2.function(List.of(new Angle(360,10,0)));
-			fail();
-		}
-		catch (Exception e){
-			final String expected = "The angle is greater then the maximum";
-			assertEquals(expected, e.getMessage());
-		}
+		ex = assertThrows(RuntimeException.class, () -> converter.function(List.of(
+				new Angle(300, -10, -10))));
+		assertTrue(ex.getMessage().contains(INVALID_MINUTES));
 
-		// Degrees are 360, invalid seconds
-		try {
-			SILab2.function(List.of(new Angle(360,0,10)));
-			fail();
-		}
-		catch (Exception e){
-			final String expected = "The angle is greater then the maximum";
-			assertEquals(expected, e.getMessage());
-		}
+		ex = assertThrows(RuntimeException.class, () -> converter.function(List.of(
+				new Angle(300, 20, -20))));
+		assertTrue(ex.getMessage().contains(INVALID_SECONDS));
 
-		// Invalid degrees, minutes and seconds don't matter
-		try {
-			SILab2.function(List.of(new Angle(500,0,0)));
-			fail();
-		}
-		catch (Exception e){
-			final String expected = "The angle is smaller or greater then the minimum";
-			assertEquals(expected, e.getMessage());
-		}
+		ex = assertThrows(RuntimeException.class, () -> converter.function(List.of(
+				new Angle(360, 1, 2))));
+		assertTrue(ex.getMessage().contains(ANGLE_GREATER_THAN_MAX));
+
 	}
+
+
 }
