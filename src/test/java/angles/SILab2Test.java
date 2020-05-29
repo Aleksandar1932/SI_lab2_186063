@@ -31,6 +31,10 @@ class SILab2Test {
 		));
 		assertEquals(List.of(0), converter.function(List.of(new Angle(0, 0, 0))));
 		assertEquals(List.of(),converter.function(List.of()));
+		assertEquals(
+				List.of(100*3600 + 10*60 + 10),
+				converter.function(List.of(new Angle(100,10,10)))
+		);
 
 	}
 
