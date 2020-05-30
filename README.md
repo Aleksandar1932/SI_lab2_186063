@@ -171,3 +171,7 @@ Oвој предикатен јазел е добиен имплицитно, к
 <b>Заклучок: Беа опфатени сите можни случаи во кои аголот е невалиден и за сите се фрла соодветен исклучок.</b>
 
 *) Oвие табели се достапни исто така на овој <a href="https://docs.google.com/spreadsheets/d/1JSaLbAUEXFvBoQ0B5ZFBZ8ujwi4wYpT_bs4DuoHWzY0/edit#gid=1964676690">линк</a>. Во sheet-от `Unit Tests`                                                                                                                                                                                                                                                                                                                                                                                                    
+
+`multipleCondition()` ги опфаќа тест случаите според Multiple Condition критериумот.
+
+`testExceptions()` и `testConvertibleAngles()` ги опфаќаат случаите според Every branch критериумот.
